@@ -24,12 +24,8 @@ public class BookstoreSteps {
     private String username;
     private String password;
 
-    private void setupBaseURI() {
-        RestAssured.baseURI = BASE_URI;
-    }
-
     @Given("que crio um usuário {string} com a senha {string}")
-    public void createUser(String username, String password) {
+    public void criarUsuario(String username, String password) {
         this.username = username;
         this.password = password;
 
@@ -37,13 +33,58 @@ public class BookstoreSteps {
     }
 
     @Given("que crio um usuário aleatório")
-    public void createRandomUser() {
+    public void criarUsuarioRandom() {
         this.username = generateRandomUsername();
         this.password = generateRandomPassword();
 
         createUserWithCredentials();
     }
 
+    @When("gerar um token para o usuário criado")
+    public void gerarToken() {
+        token = generateNewToken();
+        assertThat(token, is(not(emptyString())));
+    }
+
+    @When("buscar os detalhes do usuário")
+    public void buscarDetalhesDoUsuario() {
+        getUserDetails();
+    }
+
+    @Then("validar que o usuário foi criado com sucesso")
+    public void isUsuarioCriadoComSucesso() {
+        assertThat(userId, is(not(emptyString())));
+    }
+
+    @Then("validar que o token foi gerado com sucesso")
+    public void isTokenGeradoComSucesso() {
+        assertThat(token, is(not(emptyString())));
+    }
+
+    @Then("validar que recuperei os dados do usuário com sucesso")
+    public void isDetalhesdoUsuarioRecuperadosComSucesso() {
+        assertThat(userId, is(not(emptyString())));
+    }
+
+    @After
+    public void afterScenario(Scenario scenario) {
+        if (scenario.isFailed()) {
+            System.out.println("Cenário falhou! Removendo usuário criado...");
+        } else {
+            System.out.println("Cenário passou! Removendo usuário criado...");
+        }
+
+        removeCreatedUser();
+    }
+
+    //////////////////////////////////////////////////////// Métodos ////////////////////////////////////////////////////////
+    
+    //define base_uri - host
+    private void setupBaseURI() {
+        RestAssured.baseURI = BASE_URI;
+    }
+
+    //criar usuário
     private void createUserWithCredentials() {
         setupBaseURI();
 
@@ -70,34 +111,8 @@ public class BookstoreSteps {
         }
     }
 
-    @When("gerar um token para o usuário criado")
-    public void generateToken() {
-        setupBaseURI();
-
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("userName", username);
-        requestBody.put("password", password);
-
-        try {
-            Response response = RestAssured.given()
-            .contentType("application/json")
-            .body(requestBody.toString())
-            .when()
-            .post("/GenerateToken")
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
-
-            token = response.jsonPath().getString("token");
-            assertThat(token, is(not(emptyString())));
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar token", e);
-        }
-    }
-
-    @When("buscar os detalhes do usuário")
-    public void getUserDetails() {
+    //recuperar dados do usuário
+    private void getUserDetails(){
         setupBaseURI();
 
         try {
@@ -115,34 +130,10 @@ public class BookstoreSteps {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar detalhes do usuário", e);
         }
+
     }
-
-    @Then("validar que o usuário foi criado com sucesso")
-    public void userCreatedSuccessfully() {
-        assertThat(userId, is(not(emptyString())));
-    }
-
-    @Then("validar que o token foi gerado com sucesso")
-    public void tokenGeneratedSuccessfully() {
-        assertThat(token, is(not(emptyString())));
-    }
-
-    @Then("validar que recuperei os dados do usuário com sucesso")
-    public void userDetailsRetrievedSuccessfully() {
-        assertThat(userId, is(not(emptyString())));
-    }
-
-    @After
-    public void afterScenario(Scenario scenario) {
-        if (scenario.isFailed()) {
-            System.out.println("Cenário falhou! Removendo usuário criado...");
-        } else {
-            System.out.println("Cenário passou! Removendo usuário criado...");
-        }
-
-        removeCreatedUser();
-    }
-
+    
+    //remover usuário
     private void removeCreatedUser() {
         setupBaseURI();
 
@@ -166,12 +157,14 @@ public class BookstoreSteps {
         }
     }
 
+    //gerar nome de usuario random
     private String generateRandomUsername() {
         String usuario = RandomStringUtils.randomAlphanumeric(8).toLowerCase();
         System.out.println("usuário gerado: " + usuario);
         return usuario;
     }
 
+    //gerar password random
     private String generateRandomPassword() {
         String numeros = "0123456789";
         // Gerar quatro números aleatórios
@@ -182,6 +175,7 @@ public class BookstoreSteps {
         return senha;
     }
 
+    //gerar token
     private String generateNewToken() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("userName", username);

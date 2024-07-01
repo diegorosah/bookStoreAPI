@@ -1,0 +1,40 @@
+target/bookstore-api-tests-1.0-SNAPSHOT.jar
+target/cucumber-reports.html
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/surefire-reports/bullet_point.png
+target/surefire-reports/collapseall.gif
+target/surefire-reports/emailable-report.html
+target/surefire-reports/failed.png
+target/surefire-reports/index.html
+target/surefire-reports/jquery-3.6.0.min.js
+target/surefire-reports/navigator-bullet.png
+target/surefire-reports/passed.png
+target/surefire-reports/runner.BookstoreTest.txt
+target/surefire-reports/skipped.png
+target/surefire-reports/TEST-runner.BookstoreTest.xml
+target/surefire-reports/testng-reports.css
+target/surefire-reports/testng-reports.js
+target/surefire-reports/testng-reports1.css
+target/surefire-reports/testng-reports2.js
+target/surefire-reports/testng-results.xml
+target/surefire-reports/testng.css
+target/surefire-reports/junitreports/TEST-runner.BookstoreTest.xml
+target/surefire-reports/old/index.html
+target/surefire-reports/old/Surefire suite/classes.html
+target/surefire-reports/old/Surefire suite/groups.html
+target/surefire-reports/old/Surefire suite/index.html
+target/surefire-reports/old/Surefire suite/main.html
+target/surefire-reports/old/Surefire suite/methods-alphabetical.html
+target/surefire-reports/old/Surefire suite/methods-not-run.html
+target/surefire-reports/old/Surefire suite/methods.html
+target/surefire-reports/old/Surefire suite/reporter-output.html
+target/surefire-reports/old/Surefire suite/Surefire test.properties
+target/surefire-reports/old/Surefire suite/testng.xml.html
+target/surefire-reports/old/Surefire suite/toc.html
+target/surefire-reports/Surefire suite/Surefire test.html
+target/surefire-reports/Surefire suite/Surefire test.xml
+target/test-classes/runner/BookstoreTest.class
+target/test-classes/steps/BookstoreSteps.class

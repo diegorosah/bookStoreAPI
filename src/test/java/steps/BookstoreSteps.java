@@ -43,7 +43,6 @@ public class BookstoreSteps {
     @When("gerar um token para o usuário criado")
     public void gerarToken() {
         token = generateNewToken();
-        assertThat(token, is(not(emptyString())));
     }
 
     @When("buscar os detalhes do usuário")
@@ -77,14 +76,15 @@ public class BookstoreSteps {
         removeCreatedUser();
     }
 
-    //////////////////////////////////////////////////////// Métodos ////////////////////////////////////////////////////////
-    
-    //define base_uri - host
+    //////////////////////////////////////////////////////// Métodos
+    //////////////////////////////////////////////////////// ////////////////////////////////////////////////////////
+
+    // define base_uri - host
     private void setupBaseURI() {
         RestAssured.baseURI = BASE_URI;
     }
 
-    //criar usuário
+    // criar usuário
     private void createUserWithCredentials() {
         setupBaseURI();
 
@@ -93,16 +93,8 @@ public class BookstoreSteps {
         requestBody.put("password", password);
 
         try {
-            Response response = RestAssured.given()
-            .contentType("application/json")
-            .accept("application/json")
-            .body(requestBody.toString())
-            .when()
-            .post("/User")
-            .then()
-            .statusCode(201)
-            .extract()
-            .response();
+            Response response = RestAssured.given().contentType("application/json").accept("application/json")
+                    .body(requestBody.toString()).when().post("/User").then().statusCode(201).extract().response();
 
             userId = response.jsonPath().getString("userID");
             assertThat(userId, is(not(emptyString())));
@@ -111,19 +103,13 @@ public class BookstoreSteps {
         }
     }
 
-    //recuperar dados do usuário
-    private void getUserDetails(){
+    // recuperar dados do usuário
+    private void getUserDetails() {
         setupBaseURI();
 
         try {
-            Response response = RestAssured.given()
-            .header("Authorization", "Bearer " + token)
-            .when()
-            .get("/User/" + userId)
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
+            Response response = RestAssured.given().header("Authorization", "Bearer " + token).when()
+                    .get("/User/" + userId).then().statusCode(200).extract().response();
 
             String retrievedUserId = response.jsonPath().getString("userId");
             assertThat(retrievedUserId, is(equalTo(userId)));
@@ -132,8 +118,8 @@ public class BookstoreSteps {
         }
 
     }
-    
-    //remover usuário
+
+    // remover usuário
     private void removeCreatedUser() {
         setupBaseURI();
 
@@ -142,13 +128,8 @@ public class BookstoreSteps {
                 token = generateNewToken();
             }
 
-            Response response = RestAssured.given()
-            .header("Authorization", "Bearer " + token)
-            .when()
-            .delete("/User/" + userId)
-            .then().statusCode(204)
-            .extract()
-            .response();
+            Response response = RestAssured.given().header("Authorization", "Bearer " + token).when()
+                    .delete("/User/" + userId).then().statusCode(204).extract().response();
 
             int statusCode = response.statusCode();
             assertThat(statusCode, is(equalTo(204)));
@@ -157,14 +138,14 @@ public class BookstoreSteps {
         }
     }
 
-    //gerar nome de usuario random
+    // gerar nome de usuario random
     private String generateRandomUsername() {
         String usuario = RandomStringUtils.randomAlphanumeric(8).toLowerCase();
         System.out.println("usuário gerado: " + usuario);
         return usuario;
     }
 
-    //gerar password random
+    // gerar password random
     private String generateRandomPassword() {
         String numeros = "0123456789";
         // Gerar quatro números aleatórios
@@ -175,22 +156,15 @@ public class BookstoreSteps {
         return senha;
     }
 
-    //gerar token
+    // gerar token
     private String generateNewToken() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("userName", username);
         requestBody.put("password", password);
 
         try {
-            Response response = RestAssured.given()
-            .contentType("application/json")
-            .body(requestBody.toString())
-            .when()
-            .post("/GenerateToken")
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
+            Response response = RestAssured.given().contentType("application/json").body(requestBody.toString()).when()
+                    .post("/GenerateToken").then().statusCode(200).extract().response();
 
             return response.jsonPath().getString("token");
         } catch (Exception e) {

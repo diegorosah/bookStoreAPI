@@ -52,8 +52,16 @@ public class BookstoreSteps {
         requestBody.put("password", password);
 
         try {
-            Response response = RestAssured.given().contentType("application/json").accept("application/json")
-                    .body(requestBody.toString()).when().post("/User").then().statusCode(201).extract().response();
+            Response response = RestAssured.given()
+            .contentType("application/json")
+            .accept("application/json")
+            .body(requestBody.toString())
+            .when()
+            .post("/User")
+            .then()
+            .statusCode(201)
+            .extract()
+            .response();
 
             userId = response.jsonPath().getString("userID");
             assertThat(userId, is(not(emptyString())));
@@ -71,8 +79,15 @@ public class BookstoreSteps {
         requestBody.put("password", password);
 
         try {
-            Response response = RestAssured.given().contentType("application/json").body(requestBody.toString()).when()
-                    .post("/GenerateToken").then().statusCode(200).extract().response();
+            Response response = RestAssured.given()
+            .contentType("application/json")
+            .body(requestBody.toString())
+            .when()
+            .post("/GenerateToken")
+            .then()
+            .statusCode(200)
+            .extract()
+            .response();
 
             token = response.jsonPath().getString("token");
             assertThat(token, is(not(emptyString())));
@@ -86,8 +101,14 @@ public class BookstoreSteps {
         setupBaseURI();
 
         try {
-            Response response = RestAssured.given().header("Authorization", "Bearer " + token).when()
-                    .get("/User/" + userId).then().statusCode(200).extract().response();
+            Response response = RestAssured.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .get("/User/" + userId)
+            .then()
+            .statusCode(200)
+            .extract()
+            .response();
 
             String retrievedUserId = response.jsonPath().getString("userId");
             assertThat(retrievedUserId, is(equalTo(userId)));
@@ -130,8 +151,13 @@ public class BookstoreSteps {
                 token = generateNewToken();
             }
 
-            Response response = RestAssured.given().header("Authorization", "Bearer " + token).when()
-                    .delete("/User/" + userId).then().statusCode(204).extract().response();
+            Response response = RestAssured.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .delete("/User/" + userId)
+            .then().statusCode(204)
+            .extract()
+            .response();
 
             int statusCode = response.statusCode();
             assertThat(statusCode, is(equalTo(204)));
@@ -162,8 +188,15 @@ public class BookstoreSteps {
         requestBody.put("password", password);
 
         try {
-            Response response = RestAssured.given().contentType("application/json").body(requestBody.toString()).when()
-                    .post("/GenerateToken").then().statusCode(200).extract().response();
+            Response response = RestAssured.given()
+            .contentType("application/json")
+            .body(requestBody.toString())
+            .when()
+            .post("/GenerateToken")
+            .then()
+            .statusCode(200)
+            .extract()
+            .response();
 
             return response.jsonPath().getString("token");
         } catch (Exception e) {
